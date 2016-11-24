@@ -34,11 +34,11 @@ public class StreamBugApplication {
           stream.forEach(customer -> {
             try {
               File data = new File(getClass().getClassLoader().getResource("data.txt").getFile());
-              BufferedReader reader = new BufferedReader(new FileReader(data));
-              while (reader.readLine() != null) {
-                // Do stuff for the current customer
+              try (BufferedReader reader = new BufferedReader(new FileReader(data))) {
+                while (reader.readLine() != null) {
+                  // Do stuff for the current customer
+                }
               }
-              reader.close();
             } catch (IOException e) {}
             System.out.println(customer);
           });
