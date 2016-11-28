@@ -1,12 +1,7 @@
 package stream.bug;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +12,9 @@ import stream.bug.domain.Customer;
 
 @SpringBootApplication
 public class StreamBugApplication {
+
+  @Autowired
+  private StreamService service;
 
   public static void main(String[] args) {
     SpringApplication.run(StreamBugApplication.class, args);
@@ -30,19 +28,7 @@ public class StreamBugApplication {
       }
 
       try {
-        try (Stream<Customer> stream = repository.streamAll()) {
-          stream.forEach(customer -> {
-            try {
-              File data = new File(getClass().getClassLoader().getResource("data.txt").getFile());
-              try (BufferedReader reader = new BufferedReader(new FileReader(data))) {
-                while (reader.readLine() != null) {
-                  // Do stuff for the current customer
-                }
-              }
-            } catch (IOException e) {}
-            System.out.println(customer);
-          });
-        }
+        service.doStuff();
       } catch (Exception e) {
         e.printStackTrace();
         throw new BeanCreationException("A stream bug has occurred!");
